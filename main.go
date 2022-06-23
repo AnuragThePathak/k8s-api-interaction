@@ -7,6 +7,7 @@ import (
 	"github.com/AnuragThePathak/k8s-api-interaction/endpoint"
 	"github.com/AnuragThePathak/k8s-api-interaction/server"
 	"go.uber.org/zap"
+	"k8s.io/client-go/kubernetes"
 )
 
 func main() {
@@ -20,6 +21,14 @@ func main() {
 		}
 		defer logger.Sync()
 	}
+	var clientSet *kubernetes.Clientset
+	{
+		config, err := kubeConfig()
+		if err != nil {
+			logger.Panic("failed to get kube config", zap.Error(err))
+		}
+		clientSet = kubernetes.NewForConfigOrDie(config)
+	}
 	var apiServer server.Server
 	{
 		config, err := serverConfig(logger)
@@ -27,7 +36,9 @@ func main() {
 			logger.Fatal("failed to get server config", zap.Error(err))
 		}
 		apiServer = server.NewServer([]server.Endpoints{
-			&endpoint.PodEndpoints{},
+			&endpoint.PodEndpoints{
+				ClientSet: clientSet,
+			},
 		} ,config, logger)
 	}
 	apiServer.ListenAndServe()

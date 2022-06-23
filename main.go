@@ -39,6 +39,9 @@ func main() {
 			&endpoint.PodEndpoints{
 				ClientSet: clientSet,
 			},
+			&endpoint.ServiceEndpoints{
+				ClientSet: clientSet,
+			},
 		} ,config, logger)
 	}
 	apiServer.ListenAndServe()

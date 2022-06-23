@@ -1,31 +1,27 @@
 package main
 
 import (
-	"os"
-	"strconv"
+	"log"
 
+	"github.com/AnuragThePathak/k8s-api-interaction/server"
 	"go.uber.org/zap"
+	"github.com/AnuragThePathak/my-go-packages/os"
 )
 
-func serverConfig() (ServerConfig, error) {
-	config := ServerConfig{}
-	port, ok := os.LookupEnv("PORT")
-	if !ok {
-		port = "8080"
-	}
+func serverConfig(logger *zap.Logger) (server.ServerConfig, error) {
+	config := server.ServerConfig{}
 	var err error
-	config.Port, err = strconv.Atoi(port)
+	config.Port, err = os.GetEnvAsInt("PORT", 8080)
 	if err != nil {
 		return config, err
 	}
+	logger.Debug("sever config:", zap.Int("PORT", config.Port))
 	return config, nil
 }
 
 func zapConfig() zap.Config {
-	env, ok := os.LookupEnv("ENV")
-	if !ok {
-		env = "dev"
-	}
+	env, _ := os.GetEnv("ENV")
+	log.Println("ENV:", env)
 	if env == "production" {
 		return zap.NewProductionConfig()
 	}

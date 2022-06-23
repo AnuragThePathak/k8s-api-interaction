@@ -1,6 +1,14 @@
+github.com/AnuragThePathak/my-go-packages v0.0.0-20220522112212-3794a90b13a9 h1:9cdInO3dEN/0TL1QVOvqAzmrfGa5ieuqGncnUFmPmN8=
+github.com/AnuragThePathak/my-go-packages v0.0.0-20220522112212-3794a90b13a9/go.mod h1:4hS6vx9+D/9V/WOAqAEuqhUD6gAf+SuaoHmDH8ebaeg=
+github.com/AnuragThePathak/my-go-packages v0.1.0 h1:2m7f1Lw2z5lEgiF+4kvHStZZl+7+t8ISH5YbtGanp8g=
+github.com/AnuragThePathak/my-go-packages v0.1.0/go.mod h1:4hS6vx9+D/9V/WOAqAEuqhUD6gAf+SuaoHmDH8ebaeg=
+github.com/AnuragThePathak/my-go-packages v0.2.0 h1:2TnskbaFLdEECiTVI18Nu5Tidu2YxOS0/qyYIoxBiNE=
+github.com/AnuragThePathak/my-go-packages v0.2.0/go.mod h1:4hS6vx9+D/9V/WOAqAEuqhUD6gAf+SuaoHmDH8ebaeg=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/go-chi/chi v1.5.4 h1:QHdzF2szwjqVV4wmByUnTcsbIg7UGaQ0tPF2t5GcAIs=
+github.com/go-chi/chi v1.5.4/go.mod h1:uaf8YgoFazUOkPBG7fxPftUylNumIev9awIWOENIuEg=
 github.com/go-chi/chi/v5 v5.0.7 h1:rDTPXLDHGATaeHvVlLcR4Qe0zftYethFucbjVQ1PxU8=
 github.com/go-chi/chi/v5 v5.0.7/go.mod h1:DslCQbL2OYiznFReuXYUmQ2hGd1aDpCnlMNITLSKoi8=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=

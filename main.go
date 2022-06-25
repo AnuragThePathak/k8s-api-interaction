@@ -1,13 +1,17 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
 	"github.com/AnuragThePathak/k8s-api-interaction/endpoint"
 	"github.com/AnuragThePathak/k8s-api-interaction/server"
+	openelb "github.com/openelb/openelb/api/v1alpha2"
 	"go.uber.org/zap"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 func main() {
@@ -22,13 +26,25 @@ func main() {
 		defer logger.Sync()
 	}
 	var clientSet *kubernetes.Clientset
+	kubeConfig, err := kubeConfig()
 	{
-		config, err := kubeConfig()
 		if err != nil {
 			logger.Panic("failed to get kube config", zap.Error(err))
 		}
-		clientSet = kubernetes.NewForConfigOrDie(config)
+		clientSet, _ = kubernetes.NewForConfig(kubeConfig)
 	}
+	var runtimeclientSet client.Client
+	{
+		crScheme := runtime.NewScheme()
+		if err = openelb.AddToScheme(crScheme); err != nil {
+			logger.Panic("failed to add openelb to scheme", zap.Error(err))
+		}
+		if runtimeclientSet, err = client.New(kubeConfig, client.Options{
+			Scheme: crScheme,
+		}); err != nil {
+			logger.Panic("failed to create runtime client", zap.Error(errors.Unwrap(err)))
+		}
+	}  
 	var apiServer server.Server
 	{
 		config, err := serverConfig(logger)
@@ -41,6 +57,9 @@ func main() {
 			},
 			&endpoint.ServiceEndpoints{
 				ClientSet: clientSet,
+			},
+			&endpoint.OpenelbEndpoints{
+				Client: runtimeclientSet,
 			},
 		} ,config, logger)
 	}

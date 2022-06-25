@@ -37,10 +37,13 @@ func zapConfig() zap.Config {
 func kubeConfig() (*rest.Config, error) {
 	var kubeconfig *string
 	if home := homedir.HomeDir(); home != "" {
-		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube",
-			"config"), "(optional) absolute path to the kubeconfig file")
-	} else {
-		kubeconfig = flag.String("kubeconfig", "",
+		log.Println(home)
+		kubeconfig = flag.String("kube-config", filepath.Join(home, ".kube",
+		"config"), "(optional) absolute path to the kubeconfig file")
+		log.Println(home)
+		} else {
+		log.Println("Ok")
+		kubeconfig = flag.String("kube-config", "",
 			"absolute path to the kubeconfig file")
 	}
 	flag.Parse()

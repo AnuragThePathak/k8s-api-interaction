@@ -15,7 +15,8 @@ type OpenelbEndpoints struct {
 
 func (o *OpenelbEndpoints) Register(r chi.Router) {
 	r.Get("/openelb/bgp-conf", o.GetBgpConf)
-	r.Get("/openelb/bgp-peers", o.ListBgpPeers)
+	r.Get("/openelb/bgp-peer", o.ListBgpPeers)
+	r.Post("/openelb/bgp-peer", o.CreateBgpPeer)
 }
 
 func (o *OpenelbEndpoints) GetBgpConf(w http.ResponseWriter, r *http.Request) {
@@ -36,4 +37,16 @@ func (o *OpenelbEndpoints) ListBgpPeers(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	json.NewEncoder(w).Encode(peers)
+}
+
+func (o *OpenelbEndpoints) CreateBgpPeer(w http.ResponseWriter, r *http.Request) {
+	var peer openelb.BgpPeer
+	if err := json.NewDecoder(r.Body).Decode(&peer); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if err := o.Client.Create(r.Context(), &peer); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }

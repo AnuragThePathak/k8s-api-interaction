@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -24,6 +25,7 @@ func (o *OpenelbEndpoints) GetBgpConf(w http.ResponseWriter, r *http.Request) {
 	err := o.Client.Get(r.Context(), client.ObjectKey{Name: "default"}, &conf)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 	json.NewEncoder(w).Encode(conf)
@@ -34,6 +36,7 @@ func (o *OpenelbEndpoints) ListBgpPeers(w http.ResponseWriter, r *http.Request) 
 	err := o.Client.List(r.Context(), &peers)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 	json.NewEncoder(w).Encode(peers)
@@ -47,6 +50,7 @@ func (o *OpenelbEndpoints) CreateBgpPeer(w http.ResponseWriter, r *http.Request)
 	}
 	if err := o.Client.Create(r.Context(), &peer); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 }

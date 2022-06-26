@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -23,6 +24,7 @@ func (s *ServiceEndpoints) GetServicesByNs(w http.ResponseWriter, r *http.Reques
 	metav1.ListOptions{})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 	json.NewEncoder(w).Encode(services)

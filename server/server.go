@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"go.uber.org/zap"
 )
 
@@ -35,9 +36,13 @@ func NewServer(
 	}
 
 	return &server{
-		config:  config,
-		logger:  logger,
-		handler: router,
+		config: config,
+		logger: logger,
+		handler: cors.New(cors.Options{
+			AllowedOrigins: []string{"*"},
+			AllowedMethods: []string{"GET", "POST"},
+			AllowedHeaders: []string{"*"},
+		}).Handler(router),
 	}
 }
 

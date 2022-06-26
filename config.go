@@ -40,9 +40,7 @@ func kubeConfig() (*rest.Config, error) {
 		log.Println(home)
 		kubeconfig = flag.String("kube-config", filepath.Join(home, ".kube",
 		"config"), "(optional) absolute path to the kubeconfig file")
-		log.Println(home)
 		} else {
-		log.Println("Ok")
 		kubeconfig = flag.String("kube-config", "",
 			"absolute path to the kubeconfig file")
 	}

@@ -27,12 +27,15 @@ func main() {
 		defer logger.Sync()
 	}
 	var clientSet *kubernetes.Clientset
-	kubeConfig, err := rest.InClusterConfig()
 	{
+		var kubeConfig *rest.Config
+		kubeConfig, err = rest.InClusterConfig()
 		if err != nil {
 			logger.Panic("failed to get kube config", zap.Error(err))
 		}
-		clientSet, _ = kubernetes.NewForConfig(kubeConfig)
+		if clientSet, err = kubernetes.NewForConfig(kubeConfig); err != nil {
+			logger.Panic("failed to get kube client", zap.Error(err))
+		}
 	}
 	var runtimeclientSet client.Client
 	{
@@ -40,12 +43,13 @@ func main() {
 		if err = openelb.AddToScheme(crScheme); err != nil {
 			logger.Panic("failed to add openelb to scheme", zap.Error(err))
 		}
-		if runtimeclientSet, err = client.New(config.GetConfigOrDie(), client.Options{
-			Scheme: crScheme,
-		}); err != nil {
+		if runtimeclientSet, err = client.New(config.GetConfigOrDie(),
+			client.Options{
+				Scheme: crScheme,
+			}); err != nil {
 			logger.Panic("failed to create runtime client", zap.Error(err))
 		}
-	}  
+	}
 	var apiServer server.Server
 	{
 		config, err := serverConfig(logger)
@@ -62,7 +66,7 @@ func main() {
 			&endpoint.OpenelbEndpoints{
 				Client: runtimeclientSet,
 			},
-		} ,config, logger)
+		}, config, logger)
 	}
 	apiServer.ListenAndServe()
 }

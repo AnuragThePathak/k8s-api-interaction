@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -24,6 +25,7 @@ func (p *PodEndpoints) ListPods(w http.ResponseWriter, r *http.Request) {
 		metav1.ListOptions{})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 	json.NewEncoder(w).Encode(pods)
@@ -36,6 +38,7 @@ func (p *PodEndpoints) GetPod(w http.ResponseWriter, r *http.Request) {
 	metav1.GetOptions{})
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 	json.NewEncoder(w).Encode(pod)

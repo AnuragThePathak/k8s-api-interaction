@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -11,7 +10,9 @@ import (
 	"go.uber.org/zap"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/client/config"
 )
 
 func main() {
@@ -26,7 +27,7 @@ func main() {
 		defer logger.Sync()
 	}
 	var clientSet *kubernetes.Clientset
-	kubeConfig, err := kubeConfig()
+	kubeConfig, err := rest.InClusterConfig()
 	{
 		if err != nil {
 			logger.Panic("failed to get kube config", zap.Error(err))
@@ -39,10 +40,10 @@ func main() {
 		if err = openelb.AddToScheme(crScheme); err != nil {
 			logger.Panic("failed to add openelb to scheme", zap.Error(err))
 		}
-		if runtimeclientSet, err = client.New(kubeConfig, client.Options{
+		if runtimeclientSet, err = client.New(config.GetConfigOrDie(), client.Options{
 			Scheme: crScheme,
 		}); err != nil {
-			logger.Panic("failed to create runtime client", zap.Error(errors.Unwrap(err)))
+			logger.Panic("failed to create runtime client", zap.Error(err))
 		}
 	}  
 	var apiServer server.Server

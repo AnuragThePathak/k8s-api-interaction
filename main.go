@@ -10,7 +10,6 @@ import (
 	"go.uber.org/zap"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 )
@@ -28,8 +27,7 @@ func main() {
 	}
 	var clientSet *kubernetes.Clientset
 	{
-		var kubeConfig *rest.Config
-		kubeConfig, err = rest.InClusterConfig()
+		kubeConfig, err := kubeConfig()
 		if err != nil {
 			logger.Panic("failed to get kube config", zap.Error(err))
 		}
